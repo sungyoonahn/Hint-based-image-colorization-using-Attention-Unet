@@ -8,7 +8,6 @@ from train import train, validate
 # from myUnet import Unet
 from mynet2 import Unet
 
-
 def main():
     ## DATALOADER ##
     # Change to your data root directory
@@ -45,17 +44,29 @@ def main():
     save_images = True
     best_losses = 1e10
     epochs = 250
+
+    total_ssim_val = 0
+    total_psnr_val = 0
+    
     # Train model
     for epoch in range(epochs):
         # Train for one epoch, then validate
         train(train_dataloader, model, criterion, optimizer, epoch)
         with torch.no_grad():
-            losses = validate(test_dataloader, model, criterion, save_images, epoch)
+            losses, sum_ssim, sum_psnr = validate(test_dataloader, model, criterion, save_images, epoch)
+        # get sum of sum_ssim, sum_psnr
+        total_ssim_val += sum_ssim
+        total_psnr_val += sum_psnr
+        
         # Save checkpoint and replace old best model if current model is better
         if losses < best_losses:
             best_losses = losses
             torch.save(model.state_dict(), 'checkpoints/model-epoch-{}-losses-{:.5f}.pth'.format(epoch + 1, losses))
-
+    
+    print('All validations are finished')
+    print('Avg of SSIM: {}'.format(total_ssim_val/(len(test_dataloader.dataset) * epochs)))
+    print('Avg of PSNR: {}'.format(total_psnr_val/(len(test_dataloader.dataset) * epochs)))
+    
 
 if __name__ == '__main__':
     main()

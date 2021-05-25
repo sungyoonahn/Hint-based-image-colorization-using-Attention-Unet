@@ -3,8 +3,11 @@ import tqdm
 import cv2
 import os
 import shutil
-from utils import AverageMeter, ssim, save_img
+from utils import AverageMeter, ssim, save_img, psnr
 from dataloader import tensor2im
+
+# to use Tenserboard
+from tensorboardX import SummaryWriter
 
 ##TRAIN##
 def train(train_loader, model, criterion, optimizer, epoch):
@@ -13,6 +16,9 @@ def train(train_loader, model, criterion, optimizer, epoch):
     use_cuda = True
     # Prepare value counters and timers
     losses = AverageMeter()
+
+    # Tenserboard writer
+    writer = SummaryWriter("logs")
 
     for i, data in enumerate(tqdm.tqdm(train_loader)):
         if use_cuda:
@@ -46,6 +52,10 @@ def validate(val_loader, model, criterion, save_images, epoch):
     # Prepare value counters and timers
     losses = AverageMeter()
 
+    # Sum of ssim, psnr
+    sum_ssim = 0
+    sum_psnr = 0
+
     shutil.rmtree("outputs/Output")
     os.makedirs('outputs/Output', exist_ok=True)
 
@@ -77,8 +87,20 @@ def validate(val_loader, model, criterion, save_images, epoch):
 
         save_img(gt_bgr, hint_bgr, out_hint_bgr, i)
 
+        # get ssim, psnr values
+        sum_ssim += SSIM(gt_bgr, hint_bgr)
+        sum_psnr += psnr(gt_bgr, hint_bgr)
+
+    # save mean of SSIM, PSNR using Tensorboard writer
+    writer.add_scalar('SSIM on validation data', sum_ssim/len(val_loader.dataset), epoch+1)
+    writer.add_scalar('PSNR on validation data', sum_psnr/len(val_loader.dataset), epoch+1)
+
+    # print mean of SSIM, PSNR
+    print('[epoch %d] SSIM: avg = {}'.format(epoch+1, sum_ssim/len(val_loader.dataset)))
+    print('[epoch %d] PSNR: avg = {}'.format(epoch+1, sum_psnr/len(val_loader.dataset)))
+
     print('Finished validation.')
-    return losses.avg
+    return losses.avg, sum_ssim, sum_psnr
 
 
 def test(test_loader, model):
