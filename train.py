@@ -81,7 +81,7 @@ def validate(val_loader, model, criterion, save_images, epoch):
     return losses.avg
 
 
-def test(test_loader, model, criterion):
+def test(test_loader, model):
     model.eval()
     use_cuda= True
 

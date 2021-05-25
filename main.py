@@ -4,11 +4,9 @@ import torch.utils.data
 from torch import nn
 
 from dataloader import ColorHintDataset, tensor2im
-from model import ColorizationNet
-from fastai_Unet import build_res_unet
 from train import train, validate
-from unet import UNetWithResnet50Encoder
-from myUnet import Unet
+# from myUnet import Unet
+from mynet2 import Unet
 
 
 def main():
@@ -27,12 +25,10 @@ def main():
     train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=4, shuffle=True)
     test_dataloader = torch.utils.data.DataLoader(test_dataset)
 
-    # model = ColorizationNet()
-    # model = UNetWithResnet50Encoder()
-    # model = build_res_unet()
     model = Unet()
-    print(model)
-
+    # print(model)
+    PATH = "model-epoch-8-losses-0.00763.pth"
+    model.load_state_dict(torch.load(PATH))
 
     criterion = nn.L1Loss()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, weight_decay=0.0)
@@ -48,7 +44,7 @@ def main():
     os.makedirs('checkpoints', exist_ok=True)
     save_images = True
     best_losses = 1e10
-    epochs = 100
+    epochs = 250
     # Train model
     for epoch in range(epochs):
         # Train for one epoch, then validate
@@ -58,7 +54,7 @@ def main():
         # Save checkpoint and replace old best model if current model is better
         if losses < best_losses:
             best_losses = losses
-            torch.save(model.state_dict(), 'checkpoints/model-epoch-{}-losses-{:.3f}.pth'.format(epoch + 1, losses))
+            torch.save(model.state_dict(), 'checkpoints/model-epoch-{}-losses-{:.5f}.pth'.format(epoch + 1, losses))
 
 
 if __name__ == '__main__':

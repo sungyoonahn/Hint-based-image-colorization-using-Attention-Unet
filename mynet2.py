@@ -65,7 +65,7 @@ class double_conv(nn.Module):
 
         return out
 
-start_fm = 64
+start_fm = 128
 
 class Unet(nn.Module):
 
@@ -89,30 +89,10 @@ class Unet(nn.Module):
         self.double_conv4 = double_conv(start_fm * 4, start_fm * 8, 3, 1, 1)
         self.maxpool4 = nn.MaxPool2d(kernel_size=2)
 
-        # Convolution 5
-        self.double_conv5 = double_conv(start_fm * 8, start_fm * 16, 3, 1, 1)
-        self.maxpool5 = nn.MaxPool2d(kernel_size=2)
+        # Convolution 5 (Bridge)
+        self.double_conv7 = double_conv(start_fm * 8, start_fm * 16, 3, 1, 1)
 
-
-        # # Convolution 6
-        # self.double_conv6 = double_conv(start_fm * 16, start_fm * 32, 3, 1, 1)
-        # self.maxpool6 = nn.MaxPool2d(kernel_size=2)
-
-
-        # Convolution 7 (Bridge)
-        self.double_conv7 = double_conv(start_fm * 16, start_fm * 32, 3, 1, 1)
-
-
-        # # Transposed Convolution 6
-        # self.t_conv6 = nn.ConvTranspose2d(start_fm * 64, start_fm * 32, 2, 2)
-        # # Expanding Path Convolution 6
-        # self.ex_double_conv6 = double_conv(start_fm * 64, start_fm * 32, 3, 1, 1)
-
-        # Transposed Convolution 5
-        self.attn1 = AttentionBlock(start_fm * 16, start_fm * 32, 3, 1, 1)
-
-        self.t_conv5 = nn.ConvTranspose2d(start_fm * 32, start_fm * 16, 2, 2)
-        # Expanding Path Convolution 5
+        # Expanding Path Convolution 5 #NOT NEEDED IN TRAINING ERROR IN LAYER
         self.ex_double_conv5 = double_conv(start_fm * 32, start_fm * 16, 3, 1, 1)
 
         # Transposed Convolution 4
@@ -141,7 +121,6 @@ class Unet(nn.Module):
         # Convolution 1
         self.ex_double_conv1 = double_conv(start_fm * 2, start_fm, 3, 1, 1)
 
-
         self.one_by_one = nn.Conv2d(start_fm, 3, 1, 1, 0)
         self.final_act = nn.Sigmoid()
 
@@ -159,20 +138,11 @@ class Unet(nn.Module):
         conv4 = self.double_conv4(maxpool3)
         maxpool4 = self.maxpool4(conv4)
 
-        conv5 = self.double_conv5(maxpool4)
-        maxpool5= self.maxpool5(conv5)
-
-
         #Bridge
-        conv7 = self.double_conv7(maxpool5)
+        conv7 = self.double_conv7(maxpool4)
 
         # Expanding Path
-        attn1 = self.attn1(conv5, conv7)
-        t_conv5 = self.t_conv5(attn1)
-        cat5 = torch.cat([conv5, t_conv5], 1)
-        ex_conv5 = self.ex_double_conv5(cat5)
-
-        attn2 = self.attn2(conv4, ex_conv5)
+        attn2 = self.attn2(conv4, conv7)
         t_conv4 = self.t_conv4(attn2)
         cat4 = torch.cat([conv4, t_conv4], 1)
         ex_conv4 = self.ex_double_conv4(cat4)
