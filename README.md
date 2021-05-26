@@ -18,9 +18,9 @@ Our propsed model uses a mix of Unet, Resblocks and attention networks.
 ![image](https://user-images.githubusercontent.com/51948435/119621354-facf3500-be40-11eb-8177-19db9b5a1087.png)
 U-Net: Convolutional Networks for Biomedical Image Segmentation https://arxiv.org/abs/1505.04597<br>
 Unet was first proposed by Olaf.R et.al for biomedical image segmentation. Due to its versitility it is also used in various fields including image colorization.<br>
-![image](https://github.com/sungyoonahn/multimedia_term_project/blob/main/mynet2.png)
+![image](https://github.com/sungyoonahn/multimedia_term_project/blob/main/mynet2.png)<br>
 Our Unet is consists of 5 layes which includes 5 encoding layers and 4 decoding layers.<br>
 Each encoding layer consists of a 2 convolution layers with a residual block followed by a maxpooling layer.<br>
 Each decoding layer consists of an attention layer followed by a transopse convolution layer of upscaling and skip-connection from the previous layer followed by a double convilution layer with a residual block.<br>
-
+![image](https://github.com/sungyoonahn/multimedia_term_project/blob/main/resblock.png)<br>
 
