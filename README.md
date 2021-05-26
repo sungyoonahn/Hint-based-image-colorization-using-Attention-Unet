@@ -23,6 +23,6 @@ Our Unet is consists of 5 layes which includes 5 encoding layers and 4 decoding 
 Each encoding layer consists of a 2 convolution layers with a residual block followed by a maxpooling layer.<br>
 Each decoding layer consists of an attention layer followed by a transopse convolution layer of upscaling and skip-connection from the previous layer followed by a double convilution layer with a residual block.<br>
 ![image](https://github.com/sungyoonahn/multimedia_term_project/blob/main/resblock.png)<br>
-![image](https://github.com/sungyoonahn/multimedia_term_project/blob/main/attention layer.png)<br>
+![image](https://github.com/sungyoonahn/multimedia_term_project/blob/main/attention_layer.png)<br>
 
 ![image](https://user-images.githubusercontent.com/51948435/119641508-b5b4fe00-be54-11eb-9757-6f54edaca72c.png)
