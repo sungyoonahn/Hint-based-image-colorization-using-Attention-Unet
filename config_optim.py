@@ -7,6 +7,7 @@ import torchvision.models as models
 from dataload import CustomImageDataset
 from train import train, eval
 from utils import plot
+from config_settting import test_optim
 
 # For Colab(Gdrive mount)
 # from google.colab import drive
@@ -25,9 +26,9 @@ if __name__ == "__main__":
     save_path = "outputs"
 
     # Hyper Parameters
-    epoch =100
+    epoch =3
     batch_size = 2
-    learning_rate = 1e-4
+    learning_rate = 1e-3
 
     # Data Transform
     transforms_train = transforms.Compose([transforms.Resize((256, 256)),
@@ -52,33 +53,31 @@ if __name__ == "__main__":
     resnet = models.resnet18(pretrained=True)
     resnet.fc = nn.Linear(512, num_classes)
     # Load Model
-    model = resnet.to(device)
 
     # optimizer, loss function
-    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+
     criterion = nn.CrossEntropyLoss()
 
     # Training Model
-    train_loss , train_accuracy = [], []
-    val_loss , val_accuracy = [], []
 
-    best_losses = 1e10
-    name = "AdamW"
 
-    for e in range(epoch):
-        # Train, Val
-        train_epoch_loss, train_epoch_acc = train(model, train_loader, optimizer, criterion, e)
-        val_epoch_loss, val_epoch_acc = eval(model, test_loader, criterion)
+    for i in range(4):
+        model = resnet.to(device)
+        optimizer, name = test_optim(i, model, learning_rate)
+        train_loss, train_accuracy = [], []
+        val_loss, val_accuracy = [], []
+        for e in range(epoch):
+            # Train, Val
+            train_epoch_loss, train_epoch_acc = train(model, train_loader, optimizer, criterion, e)
+            val_epoch_loss, val_epoch_acc = eval(model, test_loader, criterion)
 
-        train_loss.append(train_epoch_loss)
-        train_accuracy.append(train_epoch_acc)
-        val_loss.append(val_epoch_loss)
-        val_accuracy.append(val_epoch_acc)
+            train_loss.append(train_epoch_loss)
+            train_accuracy.append(train_epoch_acc)
+            val_loss.append(val_epoch_loss)
+            val_accuracy.append(val_epoch_acc)
 
-        # Plot Acc and Loss for Train and Val Results
-        plot(train_accuracy, val_accuracy, train_loss, val_loss, save_path, name)
+            # Plot Acc and Loss for Train and Val Results
+            plot(train_accuracy, val_accuracy, train_loss, val_loss, save_path, name)
 
-        if val_epoch_loss < best_losses:
-            best_losses = val_epoch_loss
-            torch.save(model.state_dict(), save_path+
-                       '/model-epoch-{}-losses-{:.5f}.pth'.format(e + 1, val_epoch_loss))
+            # Saves Each Epoch Results (EPOCH IS SAVED IN .pth NAME)
+            torch.save(model.state_dict(), save_path+'/'+name+'_epoch_{}.pth'.format(e))
