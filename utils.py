@@ -40,7 +40,7 @@ def save_img(gt, hint, output, num):
     PSNR = psnr(gt, output)
     cv2.imwrite("outputs/GroundTruth/"+str(num)+"gt.png", gt)
     cv2.imwrite("outputs/Hint/"+str(num)+"hint.png", hint)
-    cv2.imwrite(result_path + "outputs/Output/"+str(epoch)+'_epoch_'+str(num)+"_ssim:"+str(SSIM_VAL)+"_psnr:"+str(PSNR)+".png", output)
+    cv2.imwrite("outputs/Output/"+str(num)+"_ssim:"+str(SSIM_VAL)+"_psnr:"+str(PSNR)+".png", output)
 
 
 
