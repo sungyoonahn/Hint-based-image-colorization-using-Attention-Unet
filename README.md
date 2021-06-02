@@ -5,13 +5,13 @@
 
 ## Contents
 1. Data description
-2. Model descrition
-3. Terms of use
+2. Model description
+3. How to run the code
 
-## Data description
+## 1. Data description
 The dataset was provided by the challenge. The dataset is consisted of 5000 images. Training and validation data is split with a 9 to 1 ratio. Testing data is consisted of 2 seperate files consisting of lightness images of channel 1 and mask images of channel 2.
 
-## Model description
+## 2. Model description
 Our propsed model uses a mix of Unet, Resblocks and attention networks.
 
 ### Related work
@@ -42,3 +42,17 @@ Each decoding layer consists of an attention layer followed by a transopse convo
 
 #### results
 ![image](https://github.com/sungyoonahn/multimedia_term_project/blob/main/colorization_output.png)<br>
+
+## 3. How to use the code
+- dataloader.py contains codes for creating hint images and loading data.
+- main.py contains codes for training the model.
+- mynet2.py containes codes for the attention-unet
+- test.py containes codes for testing test images provided by the contest.
+- train.py contains codes for train, validation and test functions.
+- utils.py contains codes for saving validation outputs, calculating loss, calculating psnr and ssim values.
+ ##### Requirements
+- Cuda 10.2 and up
+- Pytorch for same cuda version
+- torch-summary, tqdm , numpy, matplotlib
+with requirements installed run main.py<br>
+Good Luck!
