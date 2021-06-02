@@ -1,7 +1,7 @@
-# multimedia_term_project
+# Hint-based-image-colorization-using-Attention-Unet
 
 #### This project is part of the 2021 multimedia class ConvNet challenge.
-http://cvipcc.com/leaderboard/colorization
+<!-- http://cvipcc.com/leaderboard/colorization -->
 
 ## Contents
 1. Data description
