@@ -22,7 +22,7 @@ Deep Residual Learning for Image Recognition https://arxiv.org/abs/1512.03385<br
 Resblocks were proposed to enhance a models performance by concatenating featuremaps from the previous convolution to the current one. This way some important features are preserved.
 
 #### Unet
-![image](https://user-images.githubusercontent.com/51948435/119621354-facf3500-be40-11eb-8177-19db9b5a1087.png)
+![image](https://user-images.githubusercontent.com/51948435/119621354-facf3500-be40-11eb-8177-19db9b5a1087.png)<br>
 U-Net: Convolutional Networks for Biomedical Image Segmentation https://arxiv.org/abs/1505.04597<br>
 Unet was first proposed by Olaf.R et.al for biomedical image segmentation. Due to its versitility it is also used in various fields including image colorization.
 
