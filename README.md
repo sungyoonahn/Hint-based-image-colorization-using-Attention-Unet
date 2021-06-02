@@ -35,10 +35,10 @@ The attention gate was proposed to enhace the performance for Unet used in segme
 ### Our proposed network
 
 ![image](https://github.com/sungyoonahn/multimedia_term_project/blob/main/mynet2.png)<br>
-Out model is a mix of the classic attention-unet with additional resblocks and a slightly different input by combining featuremaps from the attention gate, the d
+<!-- Out model is a mix of the classic attention-unet with additional resblocks and a slightly different input by combining featuremaps from the attention gate, the d -->
 Our Unet is consists of 5 layes which includes 5 encoding layers and 4 decoding layers.<br>
 Each encoding layer consists of a 2 convolution layers with a residual block followed by a maxpooling layer.<br>
-Each decoding layer consists of an attention layer followed by a transopse convolution layer of upscaling and skip-connection from the previous layer followed by a double convilution layer with a residual block.<br>
+Each decoding layer consists of an attention layer followed by a tranpose convolution layer and skip-connection from the previous layer followed by a double convolution layer with a residual block.<br>
 
 #### results
 ![image](https://github.com/sungyoonahn/multimedia_term_project/blob/main/colorization_output.png)<br>
