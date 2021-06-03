@@ -50,9 +50,6 @@ Each decoding layer consists of an attention layer followed by a tranpose convol
 - test.py containes codes for testing test images provided by the contest.
 - train.py contains codes for train, validation and test functions.
 - utils.py contains codes for saving validation outputs, calculating loss, calculating psnr and ssim values.
- ##### Requirements
-- Cuda 10.2 and up
-- Pytorch for same cuda version
-- torch-summary, tqdm , numpy, matplotlib
-with requirements installed run main.py<br>
+
+run main.py<br>
 Good Luck!
